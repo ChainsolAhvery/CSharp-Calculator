@@ -149,7 +149,7 @@ namespace C_Sharp_Calculator
             this.Divide.TabIndex = 11;
             this.Divide.Text = "/";
             this.Divide.UseVisualStyleBackColor = true;
-            this.Divide.Click += new System.EventHandler(this.Divide_Click);
+            this.Divide.Click += new System.EventHandler(this.BasicOp_Click);
             // 
             // Reciprocal
             // 
@@ -189,7 +189,7 @@ namespace C_Sharp_Calculator
             this.Multiply.TabIndex = 15;
             this.Multiply.Text = "*";
             this.Multiply.UseVisualStyleBackColor = true;
-            this.Multiply.Click += new System.EventHandler(this.Multiply_Click);
+            this.Multiply.Click += new System.EventHandler(this.BasicOp_Click);
             // 
             // Nine
             // 
@@ -269,7 +269,7 @@ namespace C_Sharp_Calculator
             this.Add.TabIndex = 23;
             this.Add.Text = "+";
             this.Add.UseVisualStyleBackColor = true;
-            this.Add.Click += new System.EventHandler(this.Add_Click);
+            this.Add.Click += new System.EventHandler(this.BasicOp_Click);
             // 
             // Three
             // 
@@ -309,7 +309,7 @@ namespace C_Sharp_Calculator
             this.Subtract.TabIndex = 19;
             this.Subtract.Text = "-";
             this.Subtract.UseVisualStyleBackColor = true;
-            this.Subtract.Click += new System.EventHandler(this.Subtract_Click);
+            this.Subtract.Click += new System.EventHandler(this.BasicOp_Click);
             // 
             // Six
             // 
@@ -354,10 +354,11 @@ namespace C_Sharp_Calculator
             // 
             this.MainDisplay.Location = new System.Drawing.Point(13, 42);
             this.MainDisplay.Name = "MainDisplay";
-            this.MainDisplay.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.MainDisplay.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.MainDisplay.Size = new System.Drawing.Size(241, 23);
             this.MainDisplay.TabIndex = 33;
             this.MainDisplay.Text = "0";
+            this.MainDisplay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // Form1
             // 

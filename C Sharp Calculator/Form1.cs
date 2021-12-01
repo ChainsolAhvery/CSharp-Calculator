@@ -16,7 +16,6 @@ namespace C_Sharp_Calculator
     public partial class Form1 : Form
     {
         decimal MainTrueValue = 0;
-        string Dummy = "";
         bool OperatorOn = false;
         bool SecondaryDigitStart = false;
         public Form1()
@@ -84,34 +83,9 @@ namespace C_Sharp_Calculator
 
         }
 
-        private void Divide_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Multiply_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Subtract_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Add_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("Entered Add_Click");
-            if (OperatorOn)
-            {
-                Equal_Click(sender, e);
-            }
-            OperatorOn = true;
-            SecondaryDigitStart = true;
-            SecondaryDisplay.Text = MainDisplay.Text + " + ";
-            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
-            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
-            Debug.WriteLine("Exited Add_Click");
+
         }
 
         private void Dot_Click(object sender, EventArgs e)
@@ -123,7 +97,7 @@ namespace C_Sharp_Calculator
         {
             Debug.WriteLine("Entered Equal_Click");
             OperatorOn = false;
-            MainTrueValue = (decimal)Convert.ToDouble(new DataTable().Compute((SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", "")), null));
+            MainTrueValue = Convert.ToDecimal(new DataTable().Compute((SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", "")), null));
             MainDisplay.Text = String.Format("{0:n0}", Decimal.Parse(MainTrueValue.ToString()));
             SecondaryDisplay.Clear();
             Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
@@ -160,6 +134,22 @@ namespace C_Sharp_Calculator
             Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
             Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
             Debug.WriteLine("Exited Digit_Click");
+        }
+
+        private void BasicOp_Click(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            Debug.WriteLine("Entered BasicOp_Click");
+            if (OperatorOn)
+            {
+                Equal_Click(sender, e);
+            }
+            OperatorOn = true;
+            SecondaryDigitStart = true;
+            SecondaryDisplay.Text = MainDisplay.Text + " " + button.Text;
+            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
+            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
+            Debug.WriteLine("Exited BasicOp_Click");
         }
     }
 }
