@@ -17,7 +17,8 @@ namespace C_Sharp_Calculator
     {
         decimal MainTrueValue = 0;
         string Dummy = "";
-        Boolean OperatorOn = false;
+        bool OperatorOn = false;
+        bool SecondaryDigitStart = false;
         public Form1()
         {
             InitializeComponent();
@@ -100,7 +101,17 @@ namespace C_Sharp_Calculator
 
         private void Add_Click(object sender, EventArgs e)
         {
-
+            Debug.WriteLine("Entered Add_Click");
+            if (OperatorOn)
+            {
+                Equal_Click(sender, e);
+            }
+            OperatorOn = true;
+            SecondaryDigitStart = true;
+            SecondaryDisplay.Text = MainDisplay.Text + " + ";
+            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
+            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
+            Debug.WriteLine("Exited Add_Click");
         }
 
         private void Dot_Click(object sender, EventArgs e)
@@ -110,7 +121,14 @@ namespace C_Sharp_Calculator
 
         private void Equal_Click(object sender, EventArgs e)
         {
-
+            Debug.WriteLine("Entered Equal_Click");
+            OperatorOn = false;
+            MainTrueValue = (decimal)Convert.ToDouble(new DataTable().Compute((SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", "")), null));
+            MainDisplay.Text = String.Format("{0:n0}", Decimal.Parse(MainTrueValue.ToString()));
+            SecondaryDisplay.Clear();
+            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
+            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
+            Debug.WriteLine("Exited Equal_Click");
         }
 
         private void PlusOrMinus_Click(object sender, EventArgs e)
@@ -120,9 +138,11 @@ namespace C_Sharp_Calculator
 
         private void Digit_Click(object sender, EventArgs e)
         {
-            if (MainDisplay.Text == "0")
+            Debug.WriteLine("Entered Digit_Click");
+            if (MainDisplay.Text == "0" || SecondaryDigitStart)
             {
                 MainDisplay.Clear();
+                SecondaryDigitStart = false;
             }
             Button button = (Button)sender;
             if (button.Text == "0")
@@ -136,8 +156,10 @@ namespace C_Sharp_Calculator
             {
                 MainTrueValue = Decimal.Parse(button.Text);
             }
-            Dummy = MainTrueValue.ToString();
-            MainDisplay.Text = String.Format("{0:n0}", Decimal.Parse(Dummy));
+            MainDisplay.Text = String.Format("{0:n0}", Decimal.Parse(MainTrueValue.ToString()));
+            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
+            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
+            Debug.WriteLine("Exited Digit_Click");
         }
     }
 }

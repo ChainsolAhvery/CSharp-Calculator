@@ -345,9 +345,10 @@ namespace C_Sharp_Calculator
             // 
             this.SecondaryDisplay.Location = new System.Drawing.Point(13, 13);
             this.SecondaryDisplay.Name = "SecondaryDisplay";
-            this.SecondaryDisplay.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.SecondaryDisplay.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.SecondaryDisplay.Size = new System.Drawing.Size(241, 23);
             this.SecondaryDisplay.TabIndex = 32;
+            this.SecondaryDisplay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // MainDisplay
             // 
