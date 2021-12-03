@@ -18,6 +18,12 @@ namespace C_Sharp_Calculator
         decimal MainTrueValue = 0;
         bool OperatorOn = false;
         bool SecondaryDigitStart = false;
+        // From: https://stackoverflow.com/questions/16035506/format-a-number-with-commas-and-decimals-in-c-sharp-asp-net-mvc3
+        string FormatNumber<T>(T number, int maxDecimals = 16)
+        {
+            return Regex.Replace(String.Format("{0:n" + maxDecimals + "}", number),
+                                 @"[" + System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator + "]?0+$", "");
+        }
         public Form1()
         {
             InitializeComponent();
@@ -83,11 +89,6 @@ namespace C_Sharp_Calculator
 
         }
 
-        private void Add_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Dot_Click(object sender, EventArgs e)
         {
 
@@ -95,24 +96,24 @@ namespace C_Sharp_Calculator
 
         private void Equal_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("Entered Equal_Click");
             OperatorOn = false;
-            MainTrueValue = Convert.ToDecimal(new DataTable().Compute((SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", "")), null));
-            MainDisplay.Text = String.Format("{0:n0}", Decimal.Parse(MainTrueValue.ToString()));
+            MainTrueValue = Convert.ToDecimal(new DataTable().Compute(SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", ""), null));
+            Debug.WriteLine("MainTrueValue is " + MainTrueValue);
+            Debug.WriteLine("MainDisplay.Text is " + MainDisplay.Text);
+            MainDisplay.Text = FormatNumber(MainTrueValue);
+            Debug.WriteLine("MainTrueValue is " + MainTrueValue);
+            Debug.WriteLine("MainDisplay.Text is " + MainDisplay.Text);
             SecondaryDisplay.Clear();
-            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
-            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
-            Debug.WriteLine("Exited Equal_Click");
         }
 
         private void PlusOrMinus_Click(object sender, EventArgs e)
         {
-
+            MainTrueValue *= -1;
+            MainDisplay.Text = FormatNumber(MainTrueValue);
         }
 
         private void Digit_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("Entered Digit_Click");
             if (MainDisplay.Text == "0" || SecondaryDigitStart)
             {
                 MainDisplay.Clear();
@@ -130,16 +131,12 @@ namespace C_Sharp_Calculator
             {
                 MainTrueValue = Decimal.Parse(button.Text);
             }
-            MainDisplay.Text = String.Format("{0:n0}", Decimal.Parse(MainTrueValue.ToString()));
-            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
-            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
-            Debug.WriteLine("Exited Digit_Click");
+            MainDisplay.Text = FormatNumber(MainTrueValue);
         }
 
         private void BasicOp_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            Debug.WriteLine("Entered BasicOp_Click");
             if (OperatorOn)
             {
                 Equal_Click(sender, e);
@@ -147,9 +144,6 @@ namespace C_Sharp_Calculator
             OperatorOn = true;
             SecondaryDigitStart = true;
             SecondaryDisplay.Text = MainDisplay.Text + " " + button.Text;
-            Debug.WriteLine("MainTrueValue is " + MainTrueValue + ": MainDisplay is " + MainDisplay.Text);
-            Debug.WriteLine("SecondaryDisplay is " + SecondaryDisplay.Text);
-            Debug.WriteLine("Exited BasicOp_Click");
         }
     }
 }
