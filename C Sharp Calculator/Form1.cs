@@ -18,6 +18,7 @@ namespace C_Sharp_Calculator
         decimal MainTrueValue = 0;
         bool OperatorOn = false;
         bool SecondaryDigitStart = false;
+        // TODO: This Regex needs adjusted to preserve trailing zeros
         // From: https://stackoverflow.com/questions/16035506/format-a-number-with-commas-and-decimals-in-c-sharp-asp-net-mvc3
         string FormatNumber<T>(T number, int maxDecimals = 16)
         {
@@ -64,9 +65,17 @@ namespace C_Sharp_Calculator
 
         }
 
+        // TODO: Further bug test Delete_Click
         private void Delete_Click(object sender, EventArgs e)
         {
-
+            if (MainDisplay.Text.Length == 0 || (MainDisplay.Text.Length == 1 && MainDisplay.Text[0] == '-'))
+            {
+                MainDisplay.Text = "0";
+            } else
+            {
+                MainDisplay.Text = MainDisplay.Text.Remove(MainDisplay.Text.Length - 1);
+                MainDisplay.Text = FormatNumber(Convert.ToDecimal(MainDisplay.Text));
+            }
         }
 
         private void MemoryClear_Click(object sender, EventArgs e)
@@ -91,47 +100,43 @@ namespace C_Sharp_Calculator
 
         private void Dot_Click(object sender, EventArgs e)
         {
-
+            if (!MainDisplay.Text.Contains("."))
+            {
+                MainDisplay.Text += ".";
+            }
         }
 
         private void Equal_Click(object sender, EventArgs e)
         {
             OperatorOn = false;
-            MainTrueValue = Convert.ToDecimal(new DataTable().Compute(SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", ""), null));
-            Debug.WriteLine("MainTrueValue is " + MainTrueValue);
-            Debug.WriteLine("MainDisplay.Text is " + MainDisplay.Text);
+            String_To_Decimal();
             MainDisplay.Text = FormatNumber(MainTrueValue);
-            Debug.WriteLine("MainTrueValue is " + MainTrueValue);
-            Debug.WriteLine("MainDisplay.Text is " + MainDisplay.Text);
             SecondaryDisplay.Clear();
         }
 
         private void PlusOrMinus_Click(object sender, EventArgs e)
         {
-            MainTrueValue *= -1;
+            if (MainDisplay.Text.StartsWith("-"))
+            {
+                MainDisplay.Text = MainDisplay.Text.TrimStart('-');
+            }
+            else
+            {
+                MainDisplay.Text = MainDisplay.Text.Insert(0, "-");
+            }
             MainDisplay.Text = FormatNumber(MainTrueValue);
         }
 
         private void Digit_Click(object sender, EventArgs e)
         {
-            if (MainDisplay.Text == "0" || SecondaryDigitStart)
+            if (SecondaryDigitStart || MainDisplay.Text == "0")
             {
                 MainDisplay.Clear();
                 SecondaryDigitStart = false;
             }
             Button button = (Button)sender;
-            if (button.Text == "0")
-            {
-                MainTrueValue *= 10;
-            } else if (MainDisplay.Text.Length > 0 && MainTrueValue > 0)
-            {
-                MainTrueValue *= 10;
-                MainTrueValue += Decimal.Parse(button.Text);
-            } else
-            {
-                MainTrueValue = Decimal.Parse(button.Text);
-            }
-            MainDisplay.Text = FormatNumber(MainTrueValue);
+            MainDisplay.Text += button.Text;
+            MainDisplay.Text = FormatNumber(Convert.ToDecimal(MainDisplay.Text));
         }
 
         private void BasicOp_Click(object sender, EventArgs e)
@@ -144,6 +149,15 @@ namespace C_Sharp_Calculator
             OperatorOn = true;
             SecondaryDigitStart = true;
             SecondaryDisplay.Text = MainDisplay.Text + " " + button.Text;
+        }
+
+        private void String_To_Decimal()
+        {
+            if (MainDisplay.Text.EndsWith("."))
+            {
+                MainDisplay.Text += "0";
+            }
+            MainTrueValue = Convert.ToDecimal(new DataTable().Compute(SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", ""), null));
         }
     }
 }
