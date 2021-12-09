@@ -15,16 +15,9 @@ namespace C_Sharp_Calculator
 
     public partial class Form1 : Form
     {
-        decimal MainTrueValue = 0;
+        decimal MainValue = 0;
         bool OperatorOn = false;
         bool SecondaryDigitStart = false;
-        // TODO: This Regex needs adjusted to preserve trailing zeros
-        // From: https://stackoverflow.com/questions/16035506/format-a-number-with-commas-and-decimals-in-c-sharp-asp-net-mvc3
-        string FormatNumber<T>(T number, int maxDecimals = 16)
-        {
-            return Regex.Replace(String.Format("{0:n" + maxDecimals + "}", number),
-                                 @"[" + System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator + "]?0+$", "");
-        }
         public Form1()
         {
             InitializeComponent();
@@ -73,7 +66,7 @@ namespace C_Sharp_Calculator
             } else
             {
                 MainDisplay.Text = MainDisplay.Text.Remove(MainDisplay.Text.Length - 1);
-                MainDisplay.Text = FormatNumber(Convert.ToDecimal(MainDisplay.Text));
+                MainDisplay.Text = Helpers.FormatNumber(Convert.ToDecimal(MainDisplay.Text));
             }
         }
 
@@ -87,36 +80,29 @@ namespace C_Sharp_Calculator
             if (MainDisplay.Text[0] == '-')
             {
                 MainDisplay.Text = "Invalid input";
-                MainTrueValue = 0;
+                MainValue = 0;
                 SecondaryDisplay.Clear();
             } else
             {
-                MainTrueValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
-                // This is the Babylonian method which has a degree of error
+                MainValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
                 // If it's a whole number, a cast is fine and dealt with in 'else'
-                if (MainTrueValue % 1 > 0)
+                if (MainValue % 1 > 0)
                 {
-                    decimal Error = Decimal.Multiply(MainTrueValue, (decimal)10e-8);
-                    decimal Result = MainTrueValue;
-                    while ((Result - MainTrueValue / Result) > Error)
-                    {
-                        Result = (Result + MainTrueValue / Result) / 2;
-                    }
-                    MainTrueValue = Result;
+                    MainValue = Helpers.SquareRoot(MainValue);
                 }
                 {
-                    MainTrueValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
-                    MainTrueValue = Convert.ToDecimal(Math.Sqrt((double)MainTrueValue));
+                    MainValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
+                    MainValue = Convert.ToDecimal(Math.Sqrt((double)MainValue));
                 }
-                MainDisplay.Text = FormatNumber(MainTrueValue);
+                MainDisplay.Text = Helpers.FormatNumber(MainValue);
             }
         }
 
         private void Squared_Click(object sender, EventArgs e)
         {
-            MainTrueValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
-            MainTrueValue = Decimal.Multiply(MainTrueValue, MainTrueValue);
-            MainDisplay.Text = FormatNumber(MainTrueValue);
+            MainValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
+            MainValue = Decimal.Multiply(MainValue, MainValue);
+            MainDisplay.Text = Helpers.FormatNumber(MainValue);
         }
 
         private void Reciprocal_Click(object sender, EventArgs e)
@@ -124,14 +110,14 @@ namespace C_Sharp_Calculator
             if (MainDisplay.Text == "0")
             {
                 MainDisplay.Text = "Invalid input";
-                MainTrueValue = 0;
+                MainValue = 0;
                 SecondaryDisplay.Clear();
             }
             else
             {
                 MainDisplay.Text = "1 / " + MainDisplay.Text;
-                MainTrueValue = Convert.ToDecimal(new DataTable().Compute(MainDisplay.Text.Replace(",", ""), null));
-                MainDisplay.Text = FormatNumber(MainTrueValue);
+                MainValue = Convert.ToDecimal(new DataTable().Compute(MainDisplay.Text.Replace(",", ""), null));
+                MainDisplay.Text = Helpers.FormatNumber(MainValue);
             }
         }
 
@@ -149,7 +135,7 @@ namespace C_Sharp_Calculator
             if (SecondaryDisplay.Text[SecondaryDisplay.TextLength - 1] == '/')
             {
                 MainDisplay.Text = "Invalid input";
-                MainTrueValue = 0;
+                MainValue = 0;
                 SecondaryDisplay.Clear();
             }
             else
@@ -158,8 +144,8 @@ namespace C_Sharp_Calculator
                 {
                     MainDisplay.Text += "0";
                 }
-                MainTrueValue = Convert.ToDecimal(new DataTable().Compute(SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", ""), null));
-                MainDisplay.Text = FormatNumber(MainTrueValue);
+                MainValue = Convert.ToDecimal(new DataTable().Compute(SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", ""), null));
+                MainDisplay.Text = Helpers.FormatNumber(MainValue);
                 SecondaryDisplay.Clear();
             }
         }
@@ -174,7 +160,7 @@ namespace C_Sharp_Calculator
             {
                 MainDisplay.Text = MainDisplay.Text.Insert(0, "-");
             }
-            MainDisplay.Text = FormatNumber(Convert.ToDecimal(MainDisplay.Text));
+            MainDisplay.Text = Helpers.FormatNumber(Convert.ToDecimal(MainDisplay.Text));
         }
 
         private void Digit_Click(object sender, EventArgs e)
@@ -184,9 +170,12 @@ namespace C_Sharp_Calculator
                 MainDisplay.Clear();
                 SecondaryDigitStart = false;
             }
-            Button button = (Button)sender;
-            MainDisplay.Text += button.Text;
-            MainDisplay.Text = FormatNumber(Convert.ToDecimal(MainDisplay.Text));
+            if (MainDisplay.Text.Substring(MainDisplay.Text.IndexOf(".") + 1).Length < 16)
+            {
+                Button button = (Button)sender;
+                MainDisplay.Text += button.Text;
+                MainDisplay.Text = Helpers.FormatNumber(Convert.ToDecimal(MainDisplay.Text));
+            }
         }
 
         private void BasicOp_Click(object sender, EventArgs e)

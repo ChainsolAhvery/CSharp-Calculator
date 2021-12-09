@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C Sharp Calculator", "C Sharp Calculator\C Sharp Calculator.csproj", "{A249B164-422C-4B56-B9F8-BF49D514717B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C Sharp Calculator", "C Sharp Calculator\C Sharp Calculator.csproj", "{A249B164-422C-4B56-B9F8-BF49D514717B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C Sharp Calculator Tests", "C Sharp Calculator Tests\C Sharp Calculator Tests.csproj", "{32766BF8-3266-47D4-9E5B-75120B233171}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A249B164-422C-4B56-B9F8-BF49D514717B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A249B164-422C-4B56-B9F8-BF49D514717B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A249B164-422C-4B56-B9F8-BF49D514717B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32766BF8-3266-47D4-9E5B-75120B233171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32766BF8-3266-47D4-9E5B-75120B233171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32766BF8-3266-47D4-9E5B-75120B233171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32766BF8-3266-47D4-9E5B-75120B233171}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
