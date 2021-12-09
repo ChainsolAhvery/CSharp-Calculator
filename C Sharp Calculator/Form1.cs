@@ -65,10 +65,9 @@ namespace C_Sharp_Calculator
 
         }
 
-        // TODO: Further bug test Delete_Click
         private void Delete_Click(object sender, EventArgs e)
         {
-            if (MainDisplay.Text.Length == 0 || (MainDisplay.Text.Length == 1 && MainDisplay.Text[0] == '-'))
+            if (MainDisplay.Text.Length < 2 || (MainDisplay.Text.Length == 2 && MainDisplay.Text[0] == '-'))
             {
                 MainDisplay.Text = "0";
             } else
@@ -85,17 +84,55 @@ namespace C_Sharp_Calculator
 
         private void SquareRoot_Click(object sender, EventArgs e)
         {
-
+            if (MainDisplay.Text[0] == '-')
+            {
+                MainDisplay.Text = "Invalid input";
+                MainTrueValue = 0;
+                SecondaryDisplay.Clear();
+            } else
+            {
+                MainTrueValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
+                // This is the Babylonian method which has a degree of error
+                // If it's a whole number, a cast is fine and dealt with in 'else'
+                if (MainTrueValue % 1 > 0)
+                {
+                    decimal Error = Decimal.Multiply(MainTrueValue, (decimal)10e-8);
+                    decimal Result = MainTrueValue;
+                    while ((Result - MainTrueValue / Result) > Error)
+                    {
+                        Result = (Result + MainTrueValue / Result) / 2;
+                    }
+                    MainTrueValue = Result;
+                }
+                {
+                    MainTrueValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
+                    MainTrueValue = Convert.ToDecimal(Math.Sqrt((double)MainTrueValue));
+                }
+                MainDisplay.Text = FormatNumber(MainTrueValue);
+            }
         }
 
         private void Squared_Click(object sender, EventArgs e)
         {
-
+            MainTrueValue = Convert.ToDecimal(MainDisplay.Text.Replace(",", ""));
+            MainTrueValue = Decimal.Multiply(MainTrueValue, MainTrueValue);
+            MainDisplay.Text = FormatNumber(MainTrueValue);
         }
 
         private void Reciprocal_Click(object sender, EventArgs e)
         {
-
+            if (MainDisplay.Text == "0")
+            {
+                MainDisplay.Text = "Invalid input";
+                MainTrueValue = 0;
+                SecondaryDisplay.Clear();
+            }
+            else
+            {
+                MainDisplay.Text = "1 / " + MainDisplay.Text;
+                MainTrueValue = Convert.ToDecimal(new DataTable().Compute(MainDisplay.Text.Replace(",", ""), null));
+                MainDisplay.Text = FormatNumber(MainTrueValue);
+            }
         }
 
         private void Dot_Click(object sender, EventArgs e)
@@ -109,9 +146,22 @@ namespace C_Sharp_Calculator
         private void Equal_Click(object sender, EventArgs e)
         {
             OperatorOn = false;
-            String_To_Decimal();
-            MainDisplay.Text = FormatNumber(MainTrueValue);
-            SecondaryDisplay.Clear();
+            if (SecondaryDisplay.Text[SecondaryDisplay.TextLength - 1] == '/')
+            {
+                MainDisplay.Text = "Invalid input";
+                MainTrueValue = 0;
+                SecondaryDisplay.Clear();
+            }
+            else
+            {
+                if (MainDisplay.Text.EndsWith("."))
+                {
+                    MainDisplay.Text += "0";
+                }
+                MainTrueValue = Convert.ToDecimal(new DataTable().Compute(SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", ""), null));
+                MainDisplay.Text = FormatNumber(MainTrueValue);
+                SecondaryDisplay.Clear();
+            }
         }
 
         private void PlusOrMinus_Click(object sender, EventArgs e)
@@ -120,16 +170,16 @@ namespace C_Sharp_Calculator
             {
                 MainDisplay.Text = MainDisplay.Text.TrimStart('-');
             }
-            else
+            else if (MainDisplay.Text != "0")
             {
                 MainDisplay.Text = MainDisplay.Text.Insert(0, "-");
             }
-            MainDisplay.Text = FormatNumber(MainTrueValue);
+            MainDisplay.Text = FormatNumber(Convert.ToDecimal(MainDisplay.Text));
         }
 
         private void Digit_Click(object sender, EventArgs e)
         {
-            if (SecondaryDigitStart || MainDisplay.Text == "0")
+            if (SecondaryDigitStart || MainDisplay.Text == "0" || MainDisplay.Text == "Invalid input")
             {
                 MainDisplay.Clear();
                 SecondaryDigitStart = false;
@@ -149,15 +199,6 @@ namespace C_Sharp_Calculator
             OperatorOn = true;
             SecondaryDigitStart = true;
             SecondaryDisplay.Text = MainDisplay.Text + " " + button.Text;
-        }
-
-        private void String_To_Decimal()
-        {
-            if (MainDisplay.Text.EndsWith("."))
-            {
-                MainDisplay.Text += "0";
-            }
-            MainTrueValue = Convert.ToDecimal(new DataTable().Compute(SecondaryDisplay.Text.Replace(",", "") + MainDisplay.Text.Replace(",", ""), null));
         }
     }
 }
