@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace C_Sharp_Calculator
 {
-    class Helpers
+    public class Helpers
     {
         // TODO: This Regex needs adjusted to preserve trailing zeros
         // From: https://stackoverflow.com/questions/16035506/format-a-number-with-commas-and-decimals-in-c-sharp-asp-net-mvc3

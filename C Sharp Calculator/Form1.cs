@@ -48,14 +48,17 @@ namespace C_Sharp_Calculator
 
         }
 
-        private void ClearEverything_Click(object sender, EventArgs e)
+        private void ClearEntry_Click(object sender, EventArgs e)
         {
-
+            MainDisplay.Text = "0";
+            MainValue = 0;
         }
 
         private void Clear_Click(object sender, EventArgs e)
         {
-
+            MainDisplay.Text = "0";
+            MainValue = 0;
+            SecondaryDisplay.Clear();
         }
 
         private void Delete_Click(object sender, EventArgs e)

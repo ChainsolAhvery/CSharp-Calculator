@@ -36,7 +36,7 @@ namespace C_Sharp_Calculator
             this.MemoryClear = new System.Windows.Forms.Button();
             this.Delete = new System.Windows.Forms.Button();
             this.Clear = new System.Windows.Forms.Button();
-            this.ClearEverything = new System.Windows.Forms.Button();
+            this.ClearEntry = new System.Windows.Forms.Button();
             this.Divide = new System.Windows.Forms.Button();
             this.Reciprocal = new System.Windows.Forms.Button();
             this.Squared = new System.Windows.Forms.Button();
@@ -131,15 +131,15 @@ namespace C_Sharp_Calculator
             this.Clear.UseVisualStyleBackColor = true;
             this.Clear.Click += new System.EventHandler(this.Clear_Click);
             // 
-            // ClearEverything
+            // ClearEntry
             // 
-            this.ClearEverything.Location = new System.Drawing.Point(13, 116);
-            this.ClearEverything.Name = "ClearEverything";
-            this.ClearEverything.Size = new System.Drawing.Size(56, 39);
-            this.ClearEverything.TabIndex = 4;
-            this.ClearEverything.Text = "CE";
-            this.ClearEverything.UseVisualStyleBackColor = true;
-            this.ClearEverything.Click += new System.EventHandler(this.ClearEverything_Click);
+            this.ClearEntry.Location = new System.Drawing.Point(13, 116);
+            this.ClearEntry.Name = "ClearEntry";
+            this.ClearEntry.Size = new System.Drawing.Size(56, 39);
+            this.ClearEntry.TabIndex = 4;
+            this.ClearEntry.Text = "CE";
+            this.ClearEntry.UseVisualStyleBackColor = true;
+            this.ClearEntry.Click += new System.EventHandler(this.ClearEntry_Click);
             // 
             // Divide
             // 
@@ -390,7 +390,7 @@ namespace C_Sharp_Calculator
             this.Controls.Add(this.MemoryClear);
             this.Controls.Add(this.Delete);
             this.Controls.Add(this.Clear);
-            this.Controls.Add(this.ClearEverything);
+            this.Controls.Add(this.ClearEntry);
             this.Controls.Add(this.MemorySubtract);
             this.Controls.Add(this.MemoryAdd);
             this.Controls.Add(this.MemoryRecall);
@@ -411,7 +411,7 @@ namespace C_Sharp_Calculator
         private System.Windows.Forms.Button MemoryClear;
         private System.Windows.Forms.Button Delete;
         private System.Windows.Forms.Button Clear;
-        private System.Windows.Forms.Button ClearEverything;
+        private System.Windows.Forms.Button ClearEntry;
         private System.Windows.Forms.Button Divide;
         private System.Windows.Forms.Button Reciprocal;
         private System.Windows.Forms.Button Squared;
